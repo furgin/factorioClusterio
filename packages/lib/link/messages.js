@@ -362,7 +362,21 @@ messages.listInstances = new Request({
 	links: ["control-master"],
 	permission: "core.instance.list",
 	responseProperties: {
-		"name": { type: "string" },
+		"list": {
+			type: "array",
+			items: {
+				additionalProperties: false,
+				required: ["name", "id", "assigned_slave", "status"],
+				properties: {
+					"name": { type: "string" },
+					"id": { type: "integer" },
+					"assigned_slave": { type: ["null", "integer"] },
+					"status": { enum: [
+							"unknown", "unassigned", "stopped", "starting", "running", "creating_save", "exporting_data",
+						]},
+				},
+			},
+		},
 	},
 });
 
