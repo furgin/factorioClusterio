@@ -31,6 +31,29 @@ function print(...content) {
 	console.log(...content);
 }
 
+
+const saveCommands = new libCommand.CommandTree({
+	name: "save", alias: ["s"], description: "Save game management",
+});
+saveCommands.add(new libCommand.Command({
+	definition: [["list", "l"], "List all save games known to the master"],
+	handler: async function(args, control) {
+		let response = await libLink.messages.listSaves.send(control);
+		print(asTable(response.list));
+	},
+}));
+
+saveCommands.add(new libCommand.Command({
+	definition: ["upload <file>", "Upload a save", (yargs) => {
+		yargs.positional("file", { describe: "File name", type: "string" });
+		yargs.option("id", { type: "number", nargs: 1, describe: "Save Game id", default: null });
+	}],
+	handler: async function(args, control) {
+		// TODO: send file contents to master
+		let response = await libLink.messages.uploadSave.send(control, { file: args.file, id: args.id });
+	},
+}));
+
 const slaveCommands = new libCommand.CommandTree({ name: "slave", description: "Slave management" });
 slaveCommands.add(new libCommand.Command({
 	definition: [["list", "l"], "List slaves connected to the master"],
@@ -689,6 +712,7 @@ async function registerCommands(controlPlugins, yargs) {
 	const rootCommands = new libCommand.CommandTree({ name: "clusterioctl", description: "Manage cluster" });
 	rootCommands.add(slaveCommands);
 	rootCommands.add(instanceCommands);
+	rootCommands.add(saveCommands);
 	rootCommands.add(permissionCommands);
 	rootCommands.add(roleCommands);
 	rootCommands.add(userCommands);

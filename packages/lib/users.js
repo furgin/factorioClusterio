@@ -290,6 +290,19 @@ User.onlineUsers = new Set();
 
 // Definitions for the built in permissions used in Clusterio.
 // description should answer "this permission allows you to ___"
+
+definePermission({
+	name: "core.save.list",
+	title: "List save games",
+	description: "Get the full list of save games in the cluster.",
+	grantByDefault: true,
+});
+definePermission({
+	name: "core.save.upload",
+	title: "Upload save game",
+	description: "Get the full list of save games in the cluster."
+});
+
 definePermission({
 	name: "core.admin",
 	title: "Administrator",

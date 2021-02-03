@@ -190,6 +190,34 @@ SlaveGroup.finalize();
 class SlaveConfig extends classes.Config { }
 SlaveConfig.registerGroup(SlaveGroup);
 
+/**
+ * Save config group for {@link module:lib/config.SaveConfig}
+ * @extends module:lib/config.ConfigGroup
+ * @memberof module:lib/config
+ */
+class SaveGroup extends classes.ConfigGroup {}
+SaveGroup.groupName = "save";
+SaveGroup.define({
+	name: "file",
+	description: "Filename of the save game",
+	type: "string",
+	initial_value: "save.zip",
+});
+SaveGroup.define({
+	name: "id",
+	description: "ID of the save game",
+	type: "number",
+	initial_value: () => Math.random() * 2**31 | 0,
+});
+SaveGroup.finalize();
+
+/**
+ * Slave Config class
+ * @extends module:lib/config.Config
+ * @memberof module:lib/config
+ */
+class SaveConfig extends classes.Config { }
+SaveConfig.registerGroup(SaveGroup);
 
 /**
  * Instance config group for {@link module:lib/config.InstanceConfig}
@@ -417,6 +445,7 @@ function registerPluginConfigGroups(pluginInfos) {
  */
 function finalizeConfigs() {
 	MasterConfig.finalize();
+	SaveConfig.finalize();
 	SlaveConfig.finalize();
 	InstanceConfig.finalize();
 	ControlConfig.finalize();
@@ -430,6 +459,7 @@ module.exports = {
 	ControlGroup,
 
 	MasterConfig,
+	SaveConfig,
 	SlaveConfig,
 	InstanceConfig,
 	ControlConfig,

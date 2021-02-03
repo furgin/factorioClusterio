@@ -322,26 +322,47 @@ messages.listSlaves = new Request({
 	},
 });
 
-messages.listInstances = new Request({
-	type: "list_instances",
+messages.listSaves = new Request({
+	type: "list_saves",
 	links: ["control-master"],
-	permission: "core.instance.list",
+	permission: "core.save.list",
 	responseProperties: {
 		"list": {
 			type: "array",
 			items: {
 				additionalProperties: false,
-				required: ["name", "id", "assigned_slave", "status"],
+				required: ["file"],
 				properties: {
-					"name": { type: "string" },
-					"id": { type: "integer" },
-					"assigned_slave": { type: ["null", "integer"] },
-					"status": { enum: [
-						"unknown", "unassigned", "stopped", "starting", "running", "creating_save", "exporting_data",
-					]},
+					"id": { type: "number" },
+					"file": { type: "string" },
+					"size": { type: "integer" },
+					"timestamp": { type: "integer" },
 				},
 			},
 		},
+	},
+});
+
+messages.uploadSave = new Request({
+	type: "upload_save",
+	links: ["control-master"],
+	permission: "core.save.upload",
+	requestProperties: {
+		"id": { type: ["integer", "null"] },
+		"file": { type: "string" },
+	},
+	responseProperties: {
+		"id": { type: "integer" },
+		"file": { type: "string" },
+	},
+});
+
+messages.listInstances = new Request({
+	type: "list_instances",
+	links: ["control-master"],
+	permission: "core.instance.list",
+	responseProperties: {
+		"name": { type: "string" },
 	},
 });
 

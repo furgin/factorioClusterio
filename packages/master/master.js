@@ -47,6 +47,7 @@ let clusterLogger;
 let db = {
 	instances: new Map(),
 	slaves: new Map(),
+	saves: new Map(),
 };
 let slaveConnections = new Map();
 let controlConnections = [];
@@ -487,6 +488,7 @@ async function shutdown() {
 		logger.info("Saving configs");
 		await fs.outputFile(masterConfigPath, JSON.stringify(masterConfig.serialize(), null, 4));
 
+		await saveMap(masterConfig.get("master.database_directory"), "saves.json", db.saves);
 		await saveMap(masterConfig.get("master.database_directory"), "slaves.json", db.slaves);
 		await saveInstances(masterConfig.get("master.database_directory"), "instances.json", db.instances);
 		await saveUsers(masterConfig.get("master.database_directory"), "users.json");
@@ -677,6 +679,38 @@ class ControlConnection extends BaseConnection {
 				debugEvents.off("message", this.ws_dumper);
 			}
 		});
+	}
+
+	async listSavesRequestHandler(message) {
+		let list = [];
+		for (let save of db.saves.values()) {
+			list.push({
+				id: save.id,
+				file: save.file,
+				size: save.size,
+				timestamp: save.timestamp
+			});
+		}
+		return { list };
+	}
+
+	async uploadSaveRequestHandler(message) {
+
+		let saveConfig = new libConfig.SaveConfig();
+		await saveConfig.init();
+
+		if (message.data.name !== null) {
+			saveConfig.set("save.file", message.data.file);
+		}
+		if (message.data.id !== null) {
+			saveConfig.set("save.id", message.data.id);
+		}
+		let file = saveConfig.get("save.file");
+		let id = saveConfig.get("save.id");
+
+		db.saves.set(file, { id, file });
+
+		return { id, file };
 	}
 
 	async listSlavesRequestHandler(message) {
@@ -1977,6 +2011,7 @@ async function startServer(args) {
 
 	await fs.ensureDir(masterConfig.get("master.database_directory"));
 
+	db.saves = await loadMap(masterConfig.get("master.database_directory"), "saves.json");
 	db.slaves = await loadMap(masterConfig.get("master.database_directory"), "slaves.json");
 	db.instances = await loadInstances(masterConfig.get("master.database_directory"), "instances.json");
 	await loadUsers(masterConfig.get("master.database_directory"), "users.json");
