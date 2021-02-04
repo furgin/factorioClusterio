@@ -45,6 +45,7 @@ mod_cache.json
 static/export
 saves
 /temp/
+map-gen-settings.json
 
 # Web build
 /packages/master/static

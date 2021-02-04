@@ -694,11 +694,19 @@ class Instance extends libLink.Link {
 		}
 	}
 
-	async createSaveRequestHandler() {
+	async createSaveRequestHandler(message) {
 		this.notifyStatus("creating_save");
 		try {
 			this.logger.verbose("Writing server-settings.json");
 			await this.writeServerSettings();
+
+			if (message.data.mapGenSettings) {
+				this.logger.verbose("Writing map-gen-settings.json...");
+				await fs.outputFile(this.server.writePath("map-gen-settings.json"),
+					JSON.stringify(message.data.mapGenSettings));
+			} else {
+				this.logger.verbose("No map-gen-settings.json file specified");
+			}
 
 			this.logger.verbose("Creating save .....");
 			// eslint-disable-next-line no-use-before-define
