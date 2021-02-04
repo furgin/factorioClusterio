@@ -853,7 +853,7 @@ class FactorioServer extends events.EventEmitter {
 				"--create", this.writePath("saves", name),
 				...(this.verboseLogging ? ["--verbose"] : []),
 				...((await fs.exists(this.writePath("map-gen-settings.json")))
-					? ["--map-gen-settings map-gen-settings.json"]:[]),
+					? ["--map-gen-settings", this.writePath("map-gen-settings.json")] : []),
 			],
 			{
 				detached: true,
