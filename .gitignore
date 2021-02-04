@@ -65,3 +65,8 @@ sharedPlugins/*/DISABLED
 
 # IDE
 .idea/
+
+config-control.json
+config-master.json
+config-slave.json
+temp

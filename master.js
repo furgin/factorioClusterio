@@ -65,6 +65,10 @@ if (!fs.existsSync("secret-api-token.txt")) {
 		expiresIn: 86400*365 // expires in 1 year
 	}));
 	console.log("Generated new master authentication private key!");
+
+	console.log(fs.readFileSync("config.json").toString());
+	console.log(fs.readFileSync("secret-api-token.txt").toString());
+
 	process.exit(0);
 }
 // write an auth token to file
