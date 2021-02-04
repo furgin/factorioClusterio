@@ -224,12 +224,19 @@ instanceCommands.add(new libCommand.Command({
 instanceCommands.add(new libCommand.Command({
 	definition: ["create-save <instance>", "Create a new save on an instance", (yargs) => {
 		yargs.positional("instance", { describe: "Instance to create on", type: "string" });
+		yargs.options({
+			"map-gen-settings": { describe: "Map generation settings for use with create-save",
+				nargs: 1,
+				type: "string" },
+		});
 	}],
 	handler: async function(args, control) {
 		let instanceId = await libCommand.resolveInstance(control, args.instance);
+		let mapGenSettings = JSON.parse(await fs.readFile(args["map-gen-settings"]));
 		await control.setLogSubscriptions({ instance_ids: [instanceId] });
 		let response = await libLink.messages.createSave.send(control, {
 			instance_id: instanceId,
+			mapGenSettings: mapGenSettings,
 		});
 	},
 }));

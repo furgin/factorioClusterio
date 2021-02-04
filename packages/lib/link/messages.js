@@ -441,6 +441,11 @@ messages.createSave = new Request({
 	links: ["control-master", "master-slave", "slave-instance"],
 	permission: "core.instance.create_save",
 	forwardTo: "instance",
+	requestProperties: {
+		"mapGenSettings": {
+			additionalProperties: true,
+		},
+	},
 });
 
 messages.loadScenario = new Request({
