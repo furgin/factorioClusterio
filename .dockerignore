@@ -1,4 +1,10 @@
 **/node_modules
 factorio
-
 secret-api-token.txt
+*.sh
+Dockerfile
+*.md
+database
+logs
+scenarios
+sharedMods
