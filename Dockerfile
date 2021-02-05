@@ -24,4 +24,10 @@ VOLUME /clusterio/instances
 VOLUME /clusterio/sharedMods
 VOLUME /clusterio/sharedPlugins
 
+ENV GROUP_ID 1000
+ENV USER_ID 1000
+#RUN groupadd --gid ${GROUP_ID} factorio
+#RUN useradd --uid ${USER_ID} factorio
+USER ${USER_ID}:${GROUP_ID}
+
 CMD RCONPORT="$RCONPORT" FACTORIOPORT="$FACTORIOPORT" MODE="$MODE" node $MODE\.js start $INSTANCE
