@@ -1,0 +1,9 @@
+FROM clusterio-base:latest
+COPY entrypoint-slave.sh .
+RUN chmod u+x entrypoint-slave.sh
+
+WORKDIR /clusterio
+RUN wget -O factorio.tar.gz https://www.factorio.com/get-download/latest/headless/linux64
+RUN tar -xf factorio.tar.gz
+
+CMD [ "./entrypoint-slave.sh" ]

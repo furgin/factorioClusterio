@@ -1,0 +1,4 @@
+FROM clusterio-base:latest
+COPY entrypoint-master.sh .
+RUN chmod u+x entrypoint-master.sh
+CMD [ "./entrypoint-master.sh" ]

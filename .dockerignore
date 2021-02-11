@@ -1,6 +1,8 @@
 # No need to invalidate cache just because we try speeding up the build
 .dockerignore
 Dockerfile
+Dockerfile.master*
+Dockerfile.slave*
 docker-compose*
 
 # Install dependencies during the build
@@ -19,5 +21,19 @@ sharedModsDisabled
 # These files should never be required during the build
 .git
 .github
+.idea
 dist
 temp
+
+build.sh
+entrypoint-master.sh
+entrypoint-slave.sh
+clusterio-master.sh
+config
+slave
+temp
+*.log
+plugin-list.json
+config-control.json
+config-master.json
+config-slave.json
